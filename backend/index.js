@@ -4,6 +4,7 @@ import cors from "cors"
 import dotenv from "dotenv"
 import connectDb from "./db/connectDb.js"
 import userRoute from "./routes/user.route.js"
+import compnayRoute from "./routes/company.route.js"
 dotenv.config({})
 
 const app = express()
@@ -31,6 +32,7 @@ const PORT= process.env.PORT || 8080
 
 // api's routes
 app.use("/api/v1/user", userRoute)
+app.use("/api/v1/company", compnayRoute)
 
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`)
