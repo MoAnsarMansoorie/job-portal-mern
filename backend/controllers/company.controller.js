@@ -1,4 +1,4 @@
-import { Company } from "../models/company.model"
+import { Company } from "../models/company.model.js"
 
 export const registerCompanyController = async (req, res) => {
     try {
@@ -50,6 +50,10 @@ export const getCompanyController = async (req, res) => {
                 message: "Companies not found"
             })
         }
+        return res.status(200).json({
+            companies,
+            success:true
+        })
         
     } catch (error) {
         console.log("Error in company getting", error)
