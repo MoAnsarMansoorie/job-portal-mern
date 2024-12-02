@@ -1,11 +1,11 @@
-import { User } from "../models/user.model"
+import { User } from "../models/user.model.js"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
 export const registerController = async (req, res) => {
     try {
         const {fullname, email, password, phoneNumber, role} = req.body
-        if(!fullname || !email || !password || !password || !role) {
+        if(!fullname || !email || !phoneNumber || !password || !role) {
             return res.status(400).json({
                 success: false,
                 message: "All fields are required"
@@ -16,13 +16,14 @@ export const registerController = async (req, res) => {
         if(user){
             return res.status(400).json({
                 success: false,
-                message: "User already exists with this email"
+                message: "User already exists with this email",
+                user
             })
         }
 
         const hashedPassword = await bcrypt.hash(password, 10)
 
-        await User.create({
+        user = await User.create({
             fullname,
             email,
             phoneNumber,
@@ -48,15 +49,15 @@ export const registerController = async (req, res) => {
 
 export const loginController = async (req, res) => {
     try {
-        const {email, password} = req.body
-        if(!email || !password){
+        const {email, password, role} = req.body
+        if(!email || !password || !role){
             return res.status(400).json({
                 success: false,
                 message: "All fields are required"
             })
         }
  
-        const user = await User.findOne({email})
+        let user = await User.findOne({email})
         if(!user){
             return res.status(400).json({
                 success: false,
@@ -100,10 +101,10 @@ export const loginController = async (req, res) => {
         })
         
     } catch (error) {
-        console.log("Error in register", error)
+        console.log("Error in login", error)
         return res.status(400).json({
             success: false,
-            message: "Error in register",
+            message: "Error in login",
             error
         })
     }
@@ -130,16 +131,13 @@ export const updateProfileController = async (req, res) => {
     try {
         const {fullname, email, phoneNumber, bio, skills} = req.body
         const file = req.file
-        if(!fullname || !email  || !phoneNumber || !bio || !skills) {
-            return res.status(400).json({
-                success: false,
-                message: "All fields are required"
-            })
-        }
-
+        
         // cloudiny will come here
 
-        const skillsArray = skills.split(",")
+        let skillsArray;
+        if(skills){
+            skillsArray = skills.split(",")
+        }
         const userId= req.id // middleware authentication
         let user = await User.findById(userId)
 
