@@ -1,8 +1,14 @@
 import express from "express"
 import cookieParser from "cookie-parser"
 import cors from "cors"
+import dotenv from "dotenv"
+import connectDb from "./db/connectDb.js"
+dotenv.config({})
 
 const app = express()
+
+// databse connection
+connectDb()
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
@@ -20,7 +26,7 @@ app.use(cors(corsOptions))
 //     })
 // })
 
-const PORT= 8080
+const PORT= process.env.PORT || 8080
 
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`)
