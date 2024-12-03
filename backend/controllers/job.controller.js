@@ -1,4 +1,4 @@
-import { Job } from "../models/job.model";
+import { Job } from "../models/job.model.js";
 
 // admin will post job
 export const jobRegisterController = async (req, res) => {
@@ -6,22 +6,23 @@ export const jobRegisterController = async (req, res) => {
         const { title, description, requirements, salary, location, jobType, experience, position, companyId } = req.body;
         const userId = req.id;
 
-        if (!title || !description || !requirements || !salary || !location || !jobType || !experience || !position || !companyId) {
-            return res.status(400).json({
-                message: "Somethin is missing.",
-                success: false
-            })
-        };
-        const job = await Job.create({
+        // if (!title || !description || !requirements || !salary || !location || !jobType || !experience || !position || !companyId) {
+        //     return res.status(400).json({
+        //         message: "Something is missing.",
+        //         success: false
+        //     })
+        // };
+
+        let job = await Job.create({
             title,
             description,
             requirements: requirements.split(","),
             salary: Number(salary),
             location,
             jobType,
-            experienceLevel: experience,
+            experience,
             position,
-            company: companyId,
+            companyId,
             created_by: userId
         });
         return res.status(201).json({
@@ -33,7 +34,7 @@ export const jobRegisterController = async (req, res) => {
     } catch (error) {
         console.log(`Error in job register`, error)
         return res.status(400).json({
-            success: true,
+            success: false,
             message: "Error in job register"
         })
     }
@@ -42,7 +43,7 @@ export const jobRegisterController = async (req, res) => {
 // student
 export const getAllJobsController = async (req, res) => {
     try {
-        const keyword = req.query.keyword
+        const keyword = req.query.keyword || ""
         const query = {
             $or: [
                 {title: {$regex: keyword, $options: "i"}},
@@ -50,7 +51,10 @@ export const getAllJobsController = async (req, res) => {
             ]
         }
 
-        const jobs = await Job.find(query)
+        const jobs = await Job.find(query).populate({
+            path: "companyId"
+        }).sort({createdAt: -1})
+
         if(!jobs) {
             return res.status(400).json({
                 success: false,
@@ -106,7 +110,7 @@ export const adminJobController = async (req, res) => {
     try {
         const adminId = req.id;
         const jobs = await Job.find({ created_by: adminId }).populate({
-            path:'company',
+            path:'companyId',
             createdAt:-1
         });
         if (!jobs) {
