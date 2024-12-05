@@ -4,7 +4,7 @@ import {Job} from "../models/job.model.js"
 export const applyJobController = async (req, res) => {
     try {
         const userId = req.id
-        const jobId = req.parama.id
+        const jobId = req.params.id
 
         if(!jobId) {
             return res.status(400).json({
@@ -14,7 +14,7 @@ export const applyJobController = async (req, res) => {
         }
 
         // check if the user has already applied for job
-        const existingUser = await Application.findById({job: jobId, applicant: userId})
+        const existingUser = await Application.findOne({job: jobId, applicant: userId})
         if(existingUser){
             return res.status(400).json({
                 success: false,
@@ -32,7 +32,7 @@ export const applyJobController = async (req, res) => {
         }
 
         // create a new applicant
-        const newApplicant = await Application.create({
+        let newApplicant = await Application.create({
             job: jobId,
             applicant: userId
         })
@@ -58,7 +58,7 @@ export const applyJobController = async (req, res) => {
 export const getAppliedJobController = async (req, res) => {
     try {
         const userId = req.id
-        const application = (await Application.find({applicant: userId})).sort({createdAt: -1}).populate({
+        const application = await Application.find({applicant: userId}).sort({createdAt: -1}).populate({
             path: "job",
             options: {sort: {createdAt: -1}},
             populate: {
@@ -79,10 +79,10 @@ export const getAppliedJobController = async (req, res) => {
         })
         
     } catch (error) {
-        console.log("Error in getting job applied", error)
+        console.log("Error in getting jobs", error)
         return res.status(400).json({
             success: false,
-            message: "Error in getting job applied",
+            message: "Error in getting jobs",
             error
         })
     }
@@ -93,7 +93,7 @@ export const getApplicantsController = async (req,res) => {
     try {
         const jobId = req.params.id;
         const job = await Job.findById(jobId).populate({
-            path:'applicatios',
+            path:'applications',
             options:{sort:{createdAt:-1}},
             populate:{
                 path:'applicant'
