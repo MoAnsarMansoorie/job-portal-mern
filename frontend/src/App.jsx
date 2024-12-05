@@ -1,13 +1,30 @@
 
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
-import { Button } from './components/ui/button'
+import Home from './pages/Home'
+import LogIn from './pages/LogIn'
+
+const appRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />
+  },
+  {
+    path: "/login",
+    element: <LogIn />
+  },
+  {
+    path: "/signup",
+    element: "/signup"
+  }
+])
 
 function App() {
 
   return (
-    <div>
-      <Button>Submit</Button>
-    </div>
+    <>
+      <RouterProvider router={appRouter} />
+    </>
   )
 }
 
