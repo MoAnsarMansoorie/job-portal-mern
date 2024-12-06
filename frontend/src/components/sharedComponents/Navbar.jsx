@@ -2,6 +2,7 @@ import { LogOut, User2 } from "lucide-react";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const user = false;
@@ -59,8 +60,8 @@ const Navbar = () => {
             </Popover>
           ) : (
             <div className="flex items-center gap-2">
-              <Button variant="outline">LogIn</Button>
-              <Button className="bg-[#6A38C2] hover:bg-[#4f239b]">SignUp</Button>
+              <Link to="/login"><Button variant="outline">LogIn</Button></Link>
+              <Link to="/signup"><Button className="bg-[#6A38C2] hover:bg-[#4f239b]">SignUp</Button></Link>
             </div>
           )}
         </div>

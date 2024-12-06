@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
 import Home from './pages/Home'
 import LogIn from './pages/LogIn'
+import SignUp from './pages/SignUp'
 
 const appRouter = createBrowserRouter([
   {
@@ -15,7 +16,7 @@ const appRouter = createBrowserRouter([
   },
   {
     path: "/signup",
-    element: "/signup"
+    element: <SignUp />
   }
 ])
 
