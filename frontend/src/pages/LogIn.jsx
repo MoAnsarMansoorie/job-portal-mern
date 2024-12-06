@@ -39,7 +39,7 @@ const LogIn = () => {
       
     } catch (error) {
       console.log("Submit data error", error)
-      error.response(error.response.data.message)
+      // error.response(error.response.data.message)
     }
   };
   return (

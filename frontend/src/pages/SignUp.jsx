@@ -41,7 +41,7 @@ const SignUp = () => {
       formData.append("file", input.file)
     }
     try {
-      const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
+      const res = await axios.post(`${USER_API_END_POINT}/signup`, formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         },
@@ -55,7 +55,7 @@ const SignUp = () => {
       
     } catch (error) {
       console.log("Submit data error", error)
-      error.response(error.response.data.message)
+      // error.response(error.response.data.message)
     }
   };
 

@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken"
 export const registerController = async (req, res) => {
     try {
         const {fullname, email, password, phoneNumber, role} = req.body
+        console.log(fullname, email, password, phoneNumber, role)
         if(!fullname || !email || !phoneNumber || !password || !role) {
             return res.status(400).json({
                 success: false,
@@ -50,6 +51,7 @@ export const registerController = async (req, res) => {
 export const loginController = async (req, res) => {
     try {
         const {email, password, role} = req.body
+        console.log(email, password, role)
         if(!email || !password || !role){
             return res.status(400).json({
                 success: false,
