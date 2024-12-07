@@ -8,6 +8,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { USER_API_END_POINT } from "@/utils/constant";
 import axios from "axios";
 import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "@/redux/authSlice";
+import { Loader2 } from "lucide-react";
 
 const LogIn = () => {
   const [input, setInput] = useState({
@@ -15,7 +18,10 @@ const LogIn = () => {
     password: "",
     role: "",
   });
+  const {loading} = useSelector(state => state.auth)
+
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -25,6 +31,7 @@ const LogIn = () => {
     e.preventDefault();
     console.log(input);
     try {
+      dispatch(setLoading(true))
       const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
         headers: {
           "Content-Type": "application/json"
@@ -40,6 +47,8 @@ const LogIn = () => {
     } catch (error) {
       console.log("Submit data error", error)
       // error.response(error.response.data.message)
+    } finally {
+      dispatch(setLoading(false))
     }
   };
   return (
@@ -97,7 +106,9 @@ const LogIn = () => {
               </div>
             </RadioGroup>
           </div>
-          <Button className="w-full cursor-pointer my-3">LogIn</Button>
+          {
+            loading ? <Button className="w-full cursor-pointer my-3"> <Loader2 className="mr-2 h-4 w-4 animate-spin"/> Please wait...</Button> : <Button className="w-full cursor-pointer my-3">LogIn</Button>
+          }
           <span className="text-sm">
             Dont have an account{" "}
             <Link to="/signup" className="text-blue-700">
