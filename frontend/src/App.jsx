@@ -4,6 +4,8 @@ import './App.css'
 import Home from './pages/Home'
 import LogIn from './pages/LogIn'
 import SignUp from './pages/SignUp'
+import Jobs from './pages/Jobs'
+import Browse from './pages/Browse'
 
 const appRouter = createBrowserRouter([
   {
@@ -17,6 +19,14 @@ const appRouter = createBrowserRouter([
   {
     path: "/signup",
     element: <SignUp />
+  },
+  {
+    path: "/jobs",
+    element: <Jobs />
+  },
+  {
+    path: "/browse",
+    element: <Browse />
   }
 ])
 
