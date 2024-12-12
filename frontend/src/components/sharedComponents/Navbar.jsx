@@ -3,9 +3,11 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
-  const user = false;
+  // const user = false;
+  const {user} = useSelector(store => store.auth)
   return (
     <div>
       <div className="flex justify-between items-center mx-auto max-w-6xl h-16">
