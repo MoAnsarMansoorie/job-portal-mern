@@ -6,6 +6,7 @@ import LogIn from './pages/LogIn'
 import SignUp from './pages/SignUp'
 import Jobs from './pages/Jobs'
 import Browse from './pages/Browse'
+import Profile from './pages/Profile'
 
 const appRouter = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const appRouter = createBrowserRouter([
   {
     path: "/browse",
     element: <Browse />
+  },
+  {
+    path: "/profile",
+    element: <Profile />
   }
 ])
 
