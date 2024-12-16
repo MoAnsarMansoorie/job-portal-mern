@@ -8,6 +8,6 @@ const router = express.Router()
 router.route("/signup").post(singleUpload, registerController)
 router.route("/login").post(loginController)
 router.route("/logout").get(logoutController)
-router.route("/profile/update").post(isAuthenticated ,updateProfileController)
+router.route("/profile/update").post(isAuthenticated, singleUpload, updateProfileController)
 
 export default router

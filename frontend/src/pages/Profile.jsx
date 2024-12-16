@@ -7,12 +7,16 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Contact, Mail, Pen } from "lucide-react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
-const skills = ["html", "css", "javascript", "python"];
+// const skills = ["html", "css", "javascript", "python"];
+const isResume = true;
 
 const Profile = () => {
   const [open, setOpen] = useState(false)
-  const isResume = true;
+  const {user} = useSelector(store=> store.auth)
+  console.log(user?.profile?.resume)
+
   return (
     <div>
       <Navbar />
@@ -23,10 +27,9 @@ const Profile = () => {
               <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
             </Avatar>
             <div>
-              <h1 className="font-medium text-xl">Full Name</h1>
+              <h1 className="font-medium text-xl">{user?.fullname}</h1>
               <p className="text-sm">
-                lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem
-                ipsum dolor lorem ipsum dolor lorem ipsum dolor{" "}
+                {user?.profile?.bio}
               </p>
             </div>
           </div>
@@ -37,18 +40,18 @@ const Profile = () => {
         <div className="my-3">
           <div className="flex items-center gap-3 my-3">
             <Mail />
-            <span>asdfg@asdfg.com</span>
+            <span>{user?.email}</span>
           </div>
           <div className="flex items-center gap-3 my-3">
             <Contact />
-            <span>9876543210</span>
+            <span>{user?.phoneNumber}</span>
           </div>
         </div>
         <div className="my-5">
           <h1 className="font-medium text-xl">Skills</h1>
           <div className="flex items-center gap-1 mt-1">
-            {skills.length !== 0 ? (
-              skills.map((item, index) => <Badge key={index}>{item}</Badge>)
+            {user?.profile?.skills.length !== 0 ? (
+              user?.profile?.skills.map((item, index) => <Badge key={index}>{item}</Badge>)
             ) : (
               <span>Not applicable</span>
             )}
@@ -58,11 +61,11 @@ const Profile = () => {
           <Label className="text-md font-bold">Resume</Label>
           {isResume ? (
             <a
-              target="blank"
-              href="https://youtube.com"
+              target="_blank"
+              href={user?.profile?.resume}
               className="text-blue-500 w-full hover:underline cursor-pointer"
             >
-              Ansar MERN Stack
+              {user?.profile?.resumeOriginalName}
             </a>
           ) : (
             <span>NA</span>

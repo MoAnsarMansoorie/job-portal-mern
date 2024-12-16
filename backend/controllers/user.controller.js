@@ -1,6 +1,8 @@
 import { User } from "../models/user.model.js"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
+import getDataUri from "../utils/dataUri.js"
+import cloudinary from "../utils/cloudinary.js"
 
 export const registerController = async (req, res) => {
     try {
@@ -12,6 +14,9 @@ export const registerController = async (req, res) => {
                 message: "All fields are required"
             })
         }
+        const file = req.file
+        const fileUri = getDataUri(file)
+        const cloudResponse = cloudinary.uploader.upload(fileUri.content)
 
         let user = await User.findOne({email})
         if(user){
@@ -29,7 +34,10 @@ export const registerController = async (req, res) => {
             email,
             phoneNumber,
             password: hashedPassword,
-            role
+            role,
+            profile: {
+                profilePhoto: cloudResponse.secure_url
+            }
         })
 
         return res.status(201).json({
@@ -132,9 +140,11 @@ export const logoutController = async (req, res) => {
 export const updateProfileController = async (req, res) => {
     try {
         const {fullname, email, phoneNumber, bio, skills} = req.body
+        // console.log(fullname, email, phoneNumber, bio, skills)
         const file = req.file
-        
         // cloudiny will come here
+        const fileUri = getDataUri(file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
 
         let skillsArray;
         if(skills){
@@ -157,6 +167,10 @@ export const updateProfileController = async (req, res) => {
         if(skills) user.profile.skills = skillsArray
 
         // resume part will come later
+        if(cloudResponse){
+            user.profile.resume = cloudResponse.secure_url  // save the cloudinary url
+            user.profile.resumeOriginalName = file.originalname // Save the original file name
+        }
 
         await user.save()
 
