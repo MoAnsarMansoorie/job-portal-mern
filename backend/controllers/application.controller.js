@@ -41,7 +41,7 @@ export const applyJobController = async (req, res) => {
         await job.save()
         return res.status(201).json({
             success: true,
-            message: "Application has registered successfully",
+            message: "Job applied successfully",
             newApplicant
         })
         

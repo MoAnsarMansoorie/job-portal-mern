@@ -81,7 +81,9 @@ export const getAllJobsController = async (req, res) => {
 export const getJobByIdController = async (req, res) => {
     try {
         const jobId = req.params.id
-        const job = await Job.findById(jobId)
+        const job = await Job.findById(jobId).populate({
+            path: "applications"
+        })
         
         if(!job){
             return res.status(400).json({
@@ -99,7 +101,7 @@ export const getJobByIdController = async (req, res) => {
     } catch (error) {
         console.log(`Error in get job by id`, error)
         return res.status(400).json({
-            success: true,
+            success: false,
             message: "Error in get job by id"
         })
     }
